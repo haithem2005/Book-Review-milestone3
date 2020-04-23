@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+
+{% extends 'base.html' %} {% block content %}
+
+
+<section class="container-fluid">
+<div class="row no-gutters container-fluid">
+  {% for cat in categories %}
+  <div class="col-4">
+    {{cat.category_name}}
+  </div>
+  <div class="col-4 offset-4">
+    view all
+  </div>
+  <div class="row no-gutters container-fluid">
+    {% for book in books %}
+    {% if book.book_category==cat.category_name %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card-dick ">
+        <div class="row no-gutters justify-content-center">
+          <div class="col-md-4 ">
+            <img src="{{book.image_source}}" class="card-img" alt="..." height="100%"/>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{book.book_name}}</h5>
+              <p class="card-text">
+                Author: {{book.book_author}}
+                <br>
+                Year: {{book.book_year}}
+                <br>
+                Rating: {{book.book_rating}}
+                <br>
+                <a href="{{url_for('reviews',book_id=book._id)}}" ><h6>View Reviews</h6></a>
+                
+              </p>
+              <a class="btn btn-success" href="#" role="button">Buy Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      {% endif %}
+     {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+</section>
+
+
+
+{% endblock %}

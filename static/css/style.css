@@ -1,0 +1,7 @@
+html,body{
+    background-color: red;
+}
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
