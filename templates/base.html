@@ -13,7 +13,7 @@
 <header>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="#"><strong>Your Book</strong></a>
+  <a class="navbar-brand" href="{{url_for('get_books')}}"><strong>Your Book</strong></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -21,17 +21,24 @@
   <div class="collapse navbar-collapse" id="navbarsExample04">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Add Book<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{{url_for('add_book')}}">Add Book<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown05">
-       
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+
+      <li>
+      
+      <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+        <div class="dropdown-menu"  aria-labelledby="dropdown05">
+        
+          {% for category in categories %}
+          <a class="dropdown-item"  name="cat" id="cat" href="{{url_for('view_by_cat',category_id=category._id)}}">{{category.category_name}}</a>
+          {% endfor %}
+          
         </div>
+      
       </li>
+
+
+      
     </ul>
     <form class="form-inline my-2 my-md-0">
       <input class="form-control" type="text" placeholder="Search">

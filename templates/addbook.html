@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %} {% block content %}
+
+<h3 class="addbook-header">Add book</h3>
+<div class="container-fluid">
+  <div class="row no-gutters justify-content-center">
+    <div class="col-md-8 mainblock">
+      <div class="container-fluid book-form">
+        <form
+          action="{{url_for('insert_book')}}"
+          class="form-addbook"
+          method="POST"
+        >
+          <div
+            class="form-group row no-guetters first-form justify-content-center"
+          >
+            <label for="book_name" class="col-md-2 col-form-label"
+              >Book Name</label
+            >
+            <div class="col-md-8">
+              <input
+                type="text"
+                class="form-control"
+                id="book_name"
+                name="book_name"
+                placeholder="Book Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row no-guetters justify-content-center">
+            <label for="year" class="col-md-2 col-form-label">Year</label>
+            <div class="col-md-8">
+              <input
+                type="text"
+                class="form-control"
+                id="year"
+                name="year"
+                placeholder="Book Published Year"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row no-guetters justify-content-center">
+            <label for="author" class="col-md-2 col-form-label">Author</label>
+            <div class="col-md-8">
+              <input
+                type="text"
+                class="form-control"
+                id="author"
+                name="author"
+                placeholder="Book Author"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row no-guetters justify-content-center">
+            <label for="image_source" class="col-md-2 col-form-label"
+              >Image Source</label
+            >
+            <div class="col-md-8">
+              <input
+                type="text"
+                class="form-control"
+                id="image_source"
+                name="image_source"
+                placeholder="Book Image Source"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group row no-gutters justify-content-center">
+            <label for="book_category" class="col-md-2 col-form-label"
+              >Category</label
+            >
+            <div class="col-md-8">
+              <select
+                id="book_category"
+                name="book_category"
+                class="form-control"
+              >
+                <option selected>Choose Category</option>
+                {% for category in categories %}
+                <option>{{category.category_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group row no-guetters justify-content-center">
+            <label for="rating" class="col-md-2 col-form-label"
+              >Book rating</label
+            >
+            <div class="col-md-8">
+              <input
+                type="text"
+                class="form-control"
+                id="rating"
+                name="rating"
+                placeholder="Book rating (From 0 to 5)"
+              />
+            </div>
+          </div>
+          <div class="form-group row no-guetters justify-content-center">
+            <label for="review" class="col-md-2 col-form-label"
+              >Book Review</label
+            >
+            <div class="col-md-8">
+              <textarea
+                type="text"
+                class="form-control"
+                id="review"
+                name="review"
+                placeholder="Your Review For The Book"
+                rows="5"
+              ></textarea>
+            </div>
+          </div>
+          <div
+            class="row no-gutters justify-content-center justify-content-center"
+          >
+            <div class="col-md-3 justify-content-center addbook-button">
+              <button type="submit" class="btn btn-secondary" name="action">
+                Add Book
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

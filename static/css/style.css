@@ -1,7 +1,83 @@
-html,body{
-    background-color: red;
+
+
+html,body { 
+  background: url("https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=668&q=80") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
+    
+    
 .no-gutters {
   margin-right: 0;
   margin-left: 0;
 }
+
+
+/* addbookpage-addbook-form*/
+.center-form{
+    margin: 0 auto;
+    padding-top: 50px;
+    max-width: 70%;
+}
+.form-item{
+   margin-bottom: 10px;
+   border:3px solid;
+   border-color: #858181;
+   
+}
+button[type="submit"]{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color:#fafafa;
+    background-color: #E70E13;   
+    border: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-secondary:hover{
+    background-color: #858181 !important;
+    color:yellow!important;
+}
+    
+@media(min-width:776px){
+    .center-form{
+        min-height: 240px;
+        max-width: 50%;
+        margin: 0 auto;
+    }
+}
+
+
+/*addbook page, addreview page */
+
+.col-form-label{
+    margin-left: 30px;
+}
+.mainblock{
+    margin:20px ;
+    background-color: #403641;
+}
+.form-addbook{
+    margin: 30px;
+}
+
+.book-form{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    
+}
+.col-form-label{
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+.addbook-button{
+    text-align: center;
+}
+.addbook-header{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: 30px;
+}
+/*view reviews page */
