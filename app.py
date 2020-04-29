@@ -26,7 +26,8 @@ def reviews(book_id):
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
     return render_template('reviews.html',
                            book=the_book,
-                           reviews=mongo.db.reviews.find())
+                           reviews=mongo.db.reviews.find(),
+                           categories=list(mongo.db.categories.find()))
 
 
 @app.route('/add_book')
@@ -72,12 +73,25 @@ def insert_review():
     mongo.db.reviews.insert_one(review_doc)
     return redirect(url_for('reviews', book_id=book_id))
 
+
 # add a review function we use book_id so that we can use the book name
 # as a value in the book name field
 @app.route('/add_review/<book_id>')
 def add_review(book_id):
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
-    return render_template('addreview.html', book=the_book)
+    return render_template('addreview.html', book=the_book,
+                           categories=list(mongo.db.categories.find()))
+
+
+# this function takes the book name from the search bar 
+# and search all the books name then display the result
+# if more than one book have the same names all the books will be displayed
+@app.route('/find_book', methods=['POST'])
+def find_book():
+    required_book = request.form.get('search')
+    the_book = list(mongo.db.books.find({"book_name": required_book}))
+    return render_template('search.html', books=the_book,
+                           categories=list(mongo.db.categories.find()))
 
 
 if __name__ == '__main__':

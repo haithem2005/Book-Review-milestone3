@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 
 {% extends 'base.html' %} {% block content %}
-<div class="section container-fluid">
+<div class="section container-fluid review_title justify-content-center">
   <div class="row no-gutters container-fluid">
     <div class="col-md-3 book_name">
-      {{book.book_name}}
+     <h3>{{book.book_name}}</h3> 
     </div>
-    <div class="col-md-3 offset-md-6 justify-content-center review_button">
+    <div class="col-md-3 offset-md-4  review_button">
       <button type="submit" class="btn btn-secondary" name="action">
         <a href="{{url_for('add_review',book_id=book._id)}}">Add Review</a>
       </button>
     </div>
   </div>
-  {% for review in reviews %} {% if book.book_name==review.book_name %}
-
-  <div class="row no-gutters container-fluid">
-    <div class="col-sm-4 review_name">
-      {{review.name}}
-    </div>
-    <div class="col-sm-4 review_date">
-      {{review.date}}
-    </div>
-  </div>
-  <div class="row no-gutters container-fluid">
-    <div class="col review">
-      {{review.review}}
-    </div>
-  </div>
-
-  {% endif %} {% endfor %}
 </div>
+
+<div class="section container-fluid main_review">
+  <div class="row no-gutters justify-content-center">
+    <div class="col-md-9">
+      {% for review in reviews %} {% if book.book_name==review.book_name %}
+      <div class="container-fluid each_review">
+        <div class="row no-gutters header_review">
+          <div class=" col-md-6 review_name">
+            <i class="material-icons person_icon">person</i>
+            {{review.name}}
+          </div>
+          <div class="col-md-6 review_date">
+            {{review.date}}
+          </div>
+        </div>
+        <div class="row no-gutters review_row">
+          <div class="col review">
+            {{review.review}}
+          </div>
+        </div>
+      </div>
+      {% endif %} {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}

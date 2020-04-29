@@ -12,6 +12,8 @@ html,body {
 .no-gutters {
   margin-right: 0;
   margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 
@@ -81,3 +83,114 @@ button[type="submit"]{
     margin-left: 30px;
 }
 /*view reviews page */
+.review_name{
+    color: blue;
+}
+.person_icon{
+    margin-right: 10px;
+    color: blue;
+}
+
+.review_date{
+    color: blue;
+}
+
+.each_review{
+   
+    margin-bottom: 30px;
+}
+.review_title{
+    margin:50px 30px 30px 30px;
+}
+.review{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+/*carousel*/
+.carousel-inner img{
+    max-height: 750px;
+    
+}
+/* books-page  viewby-page */
+
+.books_header{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.div_viewall{
+    text-align: right;
+}
+.viewall{
+     
+    margin-right: 15px; 
+}
+.book_category{
+    margin-left: 10px;
+}
+
+@media(min-width:776px){
+
+
+.viewall{
+     
+    margin-right: 25px; 
+}
+
+.book_category{
+    margin-left: 10px;
+}
+.card-dick{
+    height: 250px;
+    margin-bottom: 30px;
+}
+.card-img{
+    height: 250px;
+}
+.book_display{
+    margin-left: 50px;
+}
+    
+}
+
+
+/*---------------footer-----------------------*/
+footer{
+    background-color: #403641;
+    color: #FEF9F9;
+    min-height: 120px;
+}
+.footer-heading{
+    color: #E70E13;
+}
+
+.social{
+    padding-bottom: 15px;
+}
+.social li a i{
+    margin-top: 10px;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    padding:12px 0;
+    border-radius: 50%;
+    background-color: #8f8f8f;
+    color: #fafafa;
+    line-height: 16px;
+     transition: all 0.35s ease-in-out;
+    -moz-transition: all 0.35s ease-in-out;
+    -webkit-transition: all 0.35s ease-in-out;
+    -o-transition: all 0.35s ease-in-out;
+}
+.social li a i:hover{
+    background:#E70E13;
+}
+#footer-details{
+    padding: 20px;
+
+
+
+
+

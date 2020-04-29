@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 
-
 {% extends 'base.html' %} {% block content %}
 
-
-<section class="container-fluid">
-<div class="row no-gutters container-fluid">
-  {% for cat in categories %}
-  <div class="col-4">
-    {{cat.category_name}}
+<section class="no-gutters container-fluid">
+  {% for category in categories %}
+  <div class="row no-gutters container-fluid books_header">
+    <div class="col-4 ">
+      <h3 class="book_category">{{category.category_name}}</h3>
+    </div>
+    <div class="col-4 offset-4 div_viewall">
+      <a class="viewall" href="{{url_for('view_by_cat',category_id=category._id)}}">view all</a>
+    </div>
   </div>
-  <div class="col-4 offset-4">
-    view all
-  </div>
-  <div class="row no-gutters container-fluid">
+  
+  <div class="row no-gutters book_display">
     {% for book in books %}
-    {% if book.book_category==cat.category_name %}
+    {% if book.book_category==category.category_name %}
     <div class="col-md-6 col-lg-4">
       <div class="card-dick ">
-        <div class="row no-gutters justify-content-center">
-          <div class="col-md-4 ">
-            <img src="{{book.image_source}}" class="card-img" alt="..." height="100%"/>
+        <div class="row no-gutters">
+          <div class="col-md-4 card_image">
+            <img  src="{{book.image_source}}" class="card-img" alt="..." width="100%"  height="100%"/>
           </div>
           <div class="col-md-8">
             <div class="card-body">
@@ -45,7 +45,7 @@
      {% endfor %}
   </div>
   {% endfor %}
-</div>
+
 </section>
 
 
