@@ -19,7 +19,7 @@ mongo = PyMongo(app)
 def get_books():
     return render_template("books.html", books=list(mongo.db.books.find()),
                            categories=list(mongo.db.categories.find()),
-                           page_title="All Books")
+                           page_title="Your Book")
 
 
 @app.route('/reviews/<book_id>')
