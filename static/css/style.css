@@ -109,7 +109,7 @@ button[type="submit"]{
 
 /*carousel*/
 .carousel-inner img{
-    max-height: 750px;
+    max-height: 710px;
     
 }
 /* books-page  viewby-page */
@@ -189,8 +189,19 @@ footer{
 }
 #footer-details{
     padding: 20px;
+}
+/*---------------navbar-----------------------*/
 
+.logo{
+    background-size:contain;
+    width:50px;
+}
+.logo_name{
+background: rgb(121,140,235);
+background: radial-gradient(circle, rgba(121,140,235,1) 0%, rgba(224,6,6,1) 100%);
+  -webkit-background-clip: text;
 
-
+  -webkit-text-fill-color: transparent;
+}
 
 

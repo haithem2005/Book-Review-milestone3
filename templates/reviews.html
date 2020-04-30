@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 
 {% extends 'base.html' %} {% block content %}
-<div class="section container-fluid review_title justify-content-center">
-  <div class="row no-gutters container-fluid">
+<div class="section  review_title justify-content-center">
+  <div class="row no-gutters ">
     <div class="col-md-3 book_name">
      <h3>{{book.book_name}}</h3> 
     </div>
@@ -14,7 +14,7 @@
   </div>
 </div>
 
-<div class="section container-fluid main_review">
+<div class="section  main_review">
   <div class="row no-gutters justify-content-center">
     <div class="col-md-9">
       {% for review in reviews %} {% if book.book_name==review.book_name %}

@@ -18,7 +18,8 @@ mongo = PyMongo(app)
 @app.route('/get_books')
 def get_books():
     return render_template("books.html", books=list(mongo.db.books.find()),
-                           categories=list(mongo.db.categories.find()))
+                           categories=list(mongo.db.categories.find()),
+                           page_title="All Books")
 
 
 @app.route('/reviews/<book_id>')
@@ -27,13 +28,15 @@ def reviews(book_id):
     return render_template('reviews.html',
                            book=the_book,
                            reviews=mongo.db.reviews.find(),
-                           categories=list(mongo.db.categories.find()))
+                           categories=list(mongo.db.categories.find()),
+                           page_title=the_book['book_name']+" Reviews")
 
 
 @app.route('/add_book')
 def add_book():
     return render_template("addbook.html",
-                           categories=list(mongo.db.categories.find()))
+                           categories=list(mongo.db.categories.find()),
+                           page_title="Add Book")
 
 
 @app.route('/insert_book', methods=['POST'])
@@ -43,7 +46,8 @@ def insert_book():
                 'image_source': request.form.get('image_source'),
                 'book_author': request.form.get('author'),
                 'book_category': request.form.get('book_category'),
-                'book_rating': request.form.get('rating')}
+                'book_rating': request.form.get('rating'),
+                'book_link': request.form.get('book_link')}
     review_doc = {'book_name': request.form.get('book_name'),
                   'review': request.form.get('review')}
     mongo.db.books.insert_one(book_doc)
@@ -57,7 +61,8 @@ def view_by_cat(category_id):
     return render_template('viewby.html',
                            category=the_category,
                            books=list(mongo.db.books.find()),
-                           categories=list(mongo.db.categories.find()))
+                           categories=list(mongo.db.categories.find()),
+                           page_title=the_category['category_name'])
 
 
 @app.route('/insert_review', methods=['POST'])
@@ -80,18 +85,27 @@ def insert_review():
 def add_review(book_id):
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
     return render_template('addreview.html', book=the_book,
-                           categories=list(mongo.db.categories.find()))
+                           categories=list(mongo.db.categories.find()),
+                           page_title="Add Review")
 
 
-# this function takes the book name from the search bar 
+# this function takes the book name from the search bar
 # and search all the books name then display the result
 # if more than one book have the same names all the books will be displayed
+# this function also convert the name in search bar to lower and
+# the book names in mongo to lower then compare the name
+# from the search bar to the names of all the books in mogo db
 @app.route('/find_book', methods=['POST'])
 def find_book():
-    required_book = request.form.get('search')
-    the_book = list(mongo.db.books.find({"book_name": required_book}))
-    return render_template('search.html', books=the_book,
-                           categories=list(mongo.db.categories.find()))
+    required_book = request.form.get('search').lower()
+    result_books = []
+    the_books = list(mongo.db.books.find())
+    for book in the_books:
+        if book['book_name'].lower() == required_book:
+            result_books.append(book)
+    return render_template('search.html', books=result_books,
+                           categories=list(mongo.db.categories.find()),
+                           page_title="Search Result")
 
 
 if __name__ == '__main__':

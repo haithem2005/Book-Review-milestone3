@@ -14,8 +14,10 @@
   </div>
   
   <div class="row no-gutters book_display">
+    
     {% for book in books %}
     {% if book.book_category==category.category_name %}
+    
     <div class="col-md-6 col-lg-4">
       <div class="card-dick ">
         <div class="row no-gutters">
@@ -35,7 +37,7 @@
                 <a href="{{url_for('reviews',book_id=book._id)}}" ><h6>View Reviews</h6></a>
                 
               </p>
-              <a class="btn btn-success" href="#" role="button">Buy Book</a>
+              <a class="btn btn-success" href="{{book.book_link}}" role="button">Buy Book</a>
             </div>
           </div>
         </div>
