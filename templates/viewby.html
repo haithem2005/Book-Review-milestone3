@@ -2,6 +2,11 @@
 
 {% extends 'base.html' %} {% block content %}
 <section class="container-fluid no-gutters">
+<div class="row no-gutters container">
+<div class="col-md-3">
+{{ pagination.links }}
+</div>
+</div>
   <div class="row no-gutters container-fluid books_header">
     <div class="col-md-3">
       <h3 class="book_category">{{category.category_name}}</h3>
@@ -36,7 +41,7 @@
                     ><h6>View Reviews</h6></a
                   >
                 </p>
-                <a class="btn btn-success" href="#" role="button">Buy Book</a>
+                <a class="btn btn-success" href="{{book.book_link}}" role="button" target="_blank">Buy Book</a>
               </div>
             </div>
           </div>
@@ -46,5 +51,11 @@
 
     {% endif %} {% endfor %}
   </div>
+  <div class="row">
+  <div class="col">
+  {{ pagination.links }}
+  {{ pagination.info }}
+  </div></div>
 </section>
+
 {% endblock %}

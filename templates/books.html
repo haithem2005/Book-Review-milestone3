@@ -3,20 +3,20 @@
 {% extends 'base.html' %} {% block content %}
 
 <section class="no-gutters container-fluid">
-  {% for category in categories %}
+  {% for item in booksbycat %}
   <div class="row no-gutters container-fluid books_header">
     <div class="col-4 ">
-      <h3 class="book_category">{{category.category_name}}</h3>
+      <h3 class="book_category">{{item.cat.category_name}}</h3>
     </div>
     <div class="col-4 offset-4 div_viewall">
-      <a class="viewall" href="{{url_for('view_by_cat',category_id=category._id)}}">view all</a>
+      <a class="viewall" href="{{url_for('view_by_cat',category_id=item.cat._id)}}">view all</a>
     </div>
   </div>
   
   <div class="row no-gutters book_display">
     
-    {% for book in books %}
-    {% if book.book_category==category.category_name %}
+    {% for book in item.books %}
+    
     
     <div class="col-md-6 col-lg-4">
       <div class="card-dick ">
@@ -37,13 +37,13 @@
                 <a href="{{url_for('reviews',book_id=book._id)}}" ><h6>View Reviews</h6></a>
                 
               </p>
-              <a class="btn btn-success" href="{{book.book_link}}" role="button">Buy Book</a>
+              <a class="btn btn-success" href="{{book.book_link}}" role="button" target="_blank" >Buy Book</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-      {% endif %}
+      
      {% endfor %}
   </div>
   {% endfor %}

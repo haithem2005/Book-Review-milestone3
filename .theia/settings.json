@@ -14,5 +14,5 @@
       "**/.DS_Store": true,
       "**/.theia": true,
 },
-"python.formatting.provider": "yapf"
+"python.formatting.provider": "autopep8"
 }
