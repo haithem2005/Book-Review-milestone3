@@ -35,7 +35,11 @@
                   <br />
                   Year: {{book.book_year}}
                   <br />
-                  Rating: {{book.book_rating}}
+                  {% if book.rating != "No Rating" %}
+                Rating: {{book.rating}} / 5
+                {% else %}
+                Rating: {{book.rating}}
+                {% endif %}
                   <br />
                   <a href="{{url_for('reviews',book_id=book._id)}}"
                     ><h6>View Reviews</h6></a

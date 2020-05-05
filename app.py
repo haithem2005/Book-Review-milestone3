@@ -32,9 +32,12 @@ def get_books():
             'books': books,
             'cat': cat
         }
+        for book in books:
+            book['rating'] = rating(book['_id'])
         booksbycat.append(_books)
     return render_template("books.html", page_title="Your Book",
                            booksbycat=booksbycat,
+
                            categories=list(mongo.db.categories.find()))
 
 #              ######################################################
@@ -121,6 +124,9 @@ def view_by_cat(category_id):
 # finding the books with category name matched to the selected category
     books = list(mongo.db.books.
                  find({"book_category": the_category['category_name']}))
+# calling the rating( ) function to calculate the total rating of books
+    for book in books:
+        book['rating'] = rating(book['_id'])
 # finding the length of the list for pagination
     total = len(books)
 # adding offset to the list for pagination
@@ -130,7 +136,7 @@ def view_by_cat(category_id):
                             css_framework='bootstrap4',
                             format_total=True,   # format total. example 1,024
                             format_number=True,  # turn on format flag
-                            record_name='Books')
+                            record_name='Books', alignment='center')
 # rendering the template with pagination
     return render_template('viewby.html',
                            category=the_category,
@@ -143,6 +149,23 @@ def view_by_cat(category_id):
                            page_title=the_category['category_name'])
 
 #              ######################################################
+
+
+@app.route('/rating/<book_id>')
+def rating(book_id):
+    ratings = []
+    the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
+    rating_list = list(mongo.db.rating.
+                       find({"book_name": the_book['book_name']}))
+    for book in rating_list:
+        ratings.append(book['rating'])
+    rating_sum = 0
+    final_rating = "No Rating"
+    if len(ratings) > 0:
+        for rating in ratings:
+            rating_sum += int(rating)
+            final_rating = (rating_sum / len(ratings))
+    return final_rating
 
 
 # this function takes the book name from the search bar
@@ -181,7 +204,7 @@ def find_book():
                             css_framework='bootstrap4',
                             format_total=True,   # format total. example 1,024
                             format_number=True,  # turn on format flag
-                            record_name='Books')
+                            record_name='Books', alignment='center')
 
 # rendering the template with the pagination
     return render_template('search.html', books=the_required_books,
