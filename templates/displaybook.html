@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %} {% block content %}
+
+<section class="no-gutters container-fluid justify-content-center">
+  <div class="row no-gutters justify-content-center">
+    <div class="col-12">
+      <h2>{{book.book_name}}</h2>
+    </div>
+  </div>
+  <div class="row container-fluid no-gutters justify-content-center ">
+    <div class="col-10 col-md-4 ">
+      <div class="bookimage">
+        <img
+          src="{{book.image_source}}"
+          alt="..."
+          width="100%"
+          height="auto%"
+        />
+      </div>
+    </div>
+    <div class="col-md-7 book-info">
+      <div class="row container-fluid no-gutters justify-content-center ">
+        <div class="col-10 col-md-8">
+          <p>Published: {{book.book_year}}</p>
+        </div>
+        <div class="col-10 col-md-8">
+          <p>Author: {{book.book_author}}</p>
+        </div>
+        <div class="col-10 col-md-8">
+          <p>Rating: {{book.rating}}</p>
+        </div>
+        <div class="col-10 col-md-8">
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Rate book
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a
+                name="rating"
+                class="dropdown-item"
+                href="{{url_for('add_rating',book_id=book._id, rating='1')}}"
+                >1</a
+              >
+              <a
+                name="rating"
+                class="dropdown-item"
+                href="{{url_for('add_rating',book_id=book._id, rating='2')}}"
+                >2</a
+              >
+              <a
+                name="rating"
+                class="dropdown-item"
+                href="{{url_for('add_rating',book_id=book._id, rating='3')}}"
+                >3</a
+              >
+              <a
+                name="rating"
+                class="dropdown-item"
+                href="{{url_for('add_rating',book_id=book._id, rating='4')}}"
+                >4</a
+              >
+              <a
+                name="rating"
+                class="dropdown-item"
+                href="{{url_for('add_rating',book_id=book._id, rating='5')}}"
+                >5</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-10 col-md-8">
+          <a
+            class="btn btn-success"
+            href="{{book.book_link}}"
+            role="button"
+            target="_blank"
+            >Buy Book</a
+          >
+        </div>
+        <div class="col-10 col-md-8">
+          <h3>Book Discription</h3>
+
+          {{book.book_description}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="section review_title justify-content-center">
+  <div class="row no-gutters">
+    <div class="col-md-3 book_name">
+      <h3>Book Reviews</h3>
+    </div>
+    <div class="col-md-3 offset-md-4 review_button">
+      <button type="submit" class="btn btn-secondary" name="action">
+        <a href="{{url_for('add_review',book_id=book._id)}}">Add Review</a>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="section main_review">
+  <div class="row no-gutters justify-content-center">
+    <div class="col-md-9">
+      {% for review in reviews %}
+      <div class="container-fluid each_review">
+        <div class="row no-gutters header_review">
+          <div class="col-md-6 review_name">
+            <i class="material-icons person_icon">person</i>
+            {{review.name}}
+          </div>
+          <div class="col-md-6 review_date">
+            {{review.date}}
+          </div>
+        </div>
+        <div class="row no-gutters review_row">
+          <div class="col review">
+            {{review.review}}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

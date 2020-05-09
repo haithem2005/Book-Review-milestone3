@@ -17,7 +17,7 @@
 <div class="section  main_review">
   <div class="row no-gutters justify-content-center">
     <div class="col-md-9">
-      {% for review in reviews %} {% if book.book_name==review.book_name %}
+      {% for review in reviews %} {% if book._id==review.book_id %}
       <div class="container-fluid each_review">
         <div class="row no-gutters header_review">
           <div class=" col-md-6 review_name">

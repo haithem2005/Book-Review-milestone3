@@ -17,11 +17,12 @@
     
     {% for book in item.books %}
     
-    
+      
     <div class="col-md-6 col-lg-4">
       <div class="card-dick ">
         <div class="row no-gutters">
           <div class="col-md-4 card_image">
+
             <img  src="{{book.image_source}}" class="card-img" alt="..." width="100%"  height="100%"/>
           </div>
           <div class="col-md-8">
@@ -38,7 +39,7 @@
                 Rating: {{book.rating}}
                 {% endif %}
                 <br>
-                <a href="{{url_for('reviews',book_id=book._id)}}" ><h6>View Reviews</h6></a>
+                <a href="{{url_for('display_book',book_id=book._id)}}" ><h6>View Book</h6></a>
                 
               </p>
               <a class="btn btn-success" href="{{book.book_link}}" role="button" target="_blank" >Buy Book</a>

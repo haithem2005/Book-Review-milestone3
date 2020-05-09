@@ -9,7 +9,8 @@
 </div>
   <div class="row no-gutters container-fluid books_header">
     <div class="col-md-3">
-      <h3 class="book_category">Found Result</h3>
+      <h3 class="book_category">{{result}}</h3>
+     
     </div>
   </div>
     <div class="row no-gutters  book_display">
@@ -34,10 +35,10 @@
                   <br />
                   Year: {{book.book_year}}
                   <br />
-                  Rating: {{book.book_rating}}
+                  Rating: {{book.rating}}
                   <br />
-                  <a href="{{url_for('reviews',book_id=book._id)}}"
-                    ><h6>View Reviews</h6></a
+                  <a href="{{url_for('display_book',book_id=book._id)}}"
+                    ><h6>View Book</h6></a
                   >
                 </p>
                 <a class="btn btn-success" href="#" role="button">Buy Book</a>
