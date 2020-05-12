@@ -5,14 +5,14 @@
 <section class="no-gutters container-fluid justify-content-center">
   <div class="row no-gutters justify-content-center">
     <div class="col-12">
-      <h2>{{book.book_name}}</h2>
+      <h2>{{the_book.book_name}}</h2>
     </div>
   </div>
   <div class="row container-fluid no-gutters justify-content-center ">
     <div class="col-10 col-md-4 ">
       <div class="bookimage">
         <img
-          src="{{book.image_source}}"
+          src="{{the_book.image_source}}"
           alt="..."
           width="100%"
           height="auto%"
@@ -22,13 +22,13 @@
     <div class="col-md-7 book-info">
       <div class="row container-fluid no-gutters justify-content-center ">
         <div class="col-10 col-md-8">
-          <p>Published: {{book.book_year}}</p>
+          <p>Published: {{the_book.book_year}}</p>
         </div>
         <div class="col-10 col-md-8">
-          <p>Author: {{book.book_author}}</p>
+          <p>Author: {{the_book.book_author}}</p>
         </div>
         <div class="col-10 col-md-8">
-          <p>Rating: {{book.rating}}</p>
+          <p>Rating: {{the_book.rating}}</p>
         </div>
         <div class="col-10 col-md-8">
           <div class="dropdown">
@@ -46,31 +46,31 @@
               <a
                 name="rating"
                 class="dropdown-item"
-                href="{{url_for('add_rating',book_id=book._id, rating='1')}}"
+                href="{{url_for('add_rating',book_id=the_book._id, rating='1')}}"
                 >1</a
               >
               <a
                 name="rating"
                 class="dropdown-item"
-                href="{{url_for('add_rating',book_id=book._id, rating='2')}}"
+                href="{{url_for('add_rating',book_id=the_book._id, rating='2')}}"
                 >2</a
               >
               <a
                 name="rating"
                 class="dropdown-item"
-                href="{{url_for('add_rating',book_id=book._id, rating='3')}}"
+                href="{{url_for('add_rating',book_id=the_book._id, rating='3')}}"
                 >3</a
               >
               <a
                 name="rating"
                 class="dropdown-item"
-                href="{{url_for('add_rating',book_id=book._id, rating='4')}}"
+                href="{{url_for('add_rating',book_id=the_book._id, rating='4')}}"
                 >4</a
               >
               <a
                 name="rating"
                 class="dropdown-item"
-                href="{{url_for('add_rating',book_id=book._id, rating='5')}}"
+                href="{{url_for('add_rating',book_id=the_book._id, rating='5')}}"
                 >5</a
               >
             </div>
@@ -79,7 +79,7 @@
         <div class="col-10 col-md-8">
           <a
             class="btn btn-success"
-            href="{{book.book_link}}"
+            href="{{the_book.book_link}}"
             role="button"
             target="_blank"
             >Buy Book</a
@@ -88,11 +88,13 @@
         <div class="col-10 col-md-8">
           <h3>Book Discription</h3>
 
-          {{book.book_description}}
+          {{the_book.book_description}}
         </div>
       </div>
     </div>
   </div>
+
+
 </section>
 <div class="section review_title justify-content-center">
   <div class="row no-gutters">
@@ -101,7 +103,7 @@
     </div>
     <div class="col-md-3 offset-md-4 review_button">
       <button type="submit" class="btn btn-secondary" name="action">
-        <a href="{{url_for('add_review',book_id=book._id)}}">Add Review</a>
+        <a href="{{url_for('add_review',book_id=the_book._id)}}">Add Review</a>
       </button>
     </div>
   </div>
@@ -132,4 +134,117 @@
   </div>
 </div>
 
+
+<section class="no-gutters container-fluid">
+
+<div class="row no-gutters container-fluid books_header">
+<div class="col-12 ">
+      <h3 class="book_category">Related Books</h3>
+    </div>
+</div>
+  <div class="row no-gutters container-fluid books_header">
+    <div class="col-4 ">
+      <h4 class="book_category">By Category</h4>
+    </div>
+    <div class="col-4 offset-4 div_viewall">
+      <a class="viewall" href="{{url_for('view_by_cat',category_id=the_book.category_id)}}">view all</a>
+    </div>
+  </div>
+  
+
+  
+  <div class="row no-gutters book_display">
+  {% for book in related_books %}
+  
+    <div class="col-md-6 col-lg-4">
+      <div class="card-dick ">
+        <div class="row no-gutters">
+          <div class="col-md-4 card_image">
+
+            <img  src="{{book.image_source}}" class="card-img" alt="..." width="100%"  height="300px"/>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{book.book_name}}</h5>
+              <p class="card-text">
+                Author: {{book.book_author}}
+                <br>
+                Year: {{book.book_year}}
+                <br>
+                   {% if book.rating != "No Rating" %}
+                Rating: {{book.rating}} / 5
+                {% else %}
+                Rating: {{book.rating}}
+                {% endif %}
+                <br>
+                <a href="{{url_for('display_book',book_id=book._id)}}" ><h6>View Book</h6></a>
+                
+              </p>
+              <a class="btn btn-success" href="{{book.book_link}}" role="button" target="_blank" >Buy Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {% endfor %}
+  </div>
+  
+  <div class="row no-gutters container-fluid books_header">
+    <div class="col-4 ">
+      <h4 class="book_category">By Author</h4>
+    </div>
+    <div class="col-4 offset-4 div_viewall">
+      <a class="viewall" href="{{url_for('view_by_cat',category_id=the_book.category_id)}}">view all</a>
+    </div>
+  </div>
+
+   <div class="row justify-content-center no-gutters book_display">
+   {% if not related_books_author  %}
+   
+    <div class="row justify-content-center">
+    <div class="col">
+    <h4>No Books Found</h4>
+    </div></div>
+    {% else   %}
+    
+  {% for book in related_books_author %}
+    {% if the_book._id != book._id %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card-dick ">
+        <div class="row no-gutters">
+          <div class="col-md-4 card_image">
+
+            <img  src="{{book.image_source}}" class="card-img" alt="..." width="100%"  height="100%"/>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{book.book_name}}</h5>
+              <p class="card-text">
+                Author: {{book.book_author}}
+                <br>
+                Year: {{book.book_year}}
+                <br>
+                   {% if book.rating != "No Rating" %}
+                Rating: {{book.rating}} / 5
+                {% else %}
+                Rating: {{book.rating}}
+                {% endif %}
+                <br>
+                <a href="{{url_for('display_book',book_id=book._id)}}" ><h6>View Book</h6></a>
+                
+              </p>
+              <a class="btn btn-success" href="{{book.book_link}}" role="button" target="_blank" >Buy Book</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    
+  </div>
+
+</section>
 {% endblock %}

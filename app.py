@@ -43,16 +43,16 @@ def get_books():
 #              ######################################################
 
 
-@app.route('/reviews/<book_id>')
-def reviews(book_id):
-    the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
+# @app.route('/reviews/<book_id>')
+# def reviews(book_id):
+#    the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
 
-    reviews = mongo.db.reviews.find({"book_id": the_book['_id']})
-    return render_template('reviews.html',
-                           book=the_book,
-                           reviews=reviews,
-                           categories=list(mongo.db.categories.find()),
-                           page_title=the_book['book_name']+" Reviews")
+#    reviews = mongo.db.reviews.find({"book_id": the_book['_id']})
+#    return render_template('reviews.html',
+#                           book=the_book,
+#                           reviews=reviews,
+#                           categories=list(mongo.db.categories.find()),
+#                           page_title=the_book['book_name']+" Reviews")
 
 #              ######################################################
 
@@ -68,20 +68,20 @@ def add_book():
 
 @app.route('/insert_book', methods=['POST'])
 def insert_book():
+
     book_doc = {'book_name': request.form.get('book_name'),
                 'book_year': request.form.get('year'),
                 'image_source': request.form.get('image_source'),
                 'book_author': request.form.get('author'),
                 'book_category': request.form.get('book_category'),
-                'book_rating': request.form.get('rating'),
-                'book_link': request.form.get('book_link')}
+                'book_link': request.form.get('book_link'),
+                'book_description': request.form.get('description')}
 
-    review_doc = {'book_name': request.form.get('book_name'),
-                  'review': request.form.get('review')}
+    category = mongo.db.categories.find_one({"category_name": request.form.get('book_category')})
 
+    category_id = category['_id']
+    book_doc['category_id'] = category_id
     mongo.db.books.insert_one(book_doc)
-
-    mongo.db.reviews.insert_one(review_doc)
 
     return redirect(url_for('get_books'))
 
@@ -137,10 +137,28 @@ def display_book(book_id):
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
     book_reviews = mongo.db.reviews.find({"book_id": the_book['_id']})
     the_book['rating'] = rating(the_book['_id'])
+
+    if the_book['category_id']:
+        the_book_category = the_book['category_id']
+        related_books = list(mongo.db.books.
+                             find({"category_id": the_book_category,  "_id": {"$ne": ObjectId(book_id)}})
+                             .limit(3))
+
+    for book in related_books:
+        book['rating'] = rating(the_book['_id'])
+
+    related_books_author = list(mongo.db.books.
+                                find({"book_author": the_book['book_author']})
+                                .limit(3))
+    for book in related_books_author:
+        book['rating'] = rating(the_book['_id'])
+
     return render_template('displaybook.html',
-                           categories=list(mongo.db.categories.find()),
-                           book=the_book,
+                           categeories=list(mongo.db.categories.find()),
+                           related_books=related_books,
+                           the_book=the_book,
                            reviews=book_reviews,
+                           related_books_author=related_books_author,
                            )
 
 #              ######################################################

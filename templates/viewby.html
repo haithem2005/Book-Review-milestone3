@@ -41,8 +41,8 @@
                 Rating: {{book.rating}}
                 {% endif %}
                   <br />
-                  <a href="{{url_for('reviews',book_id=book._id)}}"
-                    ><h6>View Reviews</h6></a
+                  <a href="{{url_for('display_book',book_id=book._id)}}"
+                    ><h6>View Book</h6></a
                   >
                 </p>
                 <a class="btn btn-success" href="{{book.book_link}}" role="button" target="_blank">Buy Book</a>
