@@ -1,27 +1,73 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from datetime import datetime
 from flask_paginate import Pagination, get_page_args
+import bcrypt
 from os import path
 if path.exists("env.py"):
     import env
 
 
 # add confiqurations
+
 app = Flask(__name__)
+
 # defining the collection name as in mongodb
 app.config["MONGO_DBNAME"] = 'book_review'
 # getting the uri which connecting python with mongodb from locat file
 app.config["MONGO_URI"] = os.environ.get('MONGO_URI')
+app.config["SECRET_KEY"] = os.environ.get('SECRET_KEY')
+
 # creating instance of pymongo
 mongo = PyMongo(app)
 
+
 #              ######################################################
-
-
 @app.route('/')
+def index():
+    if 'username' in session:
+        return redirect(url_for('get_books'))
+
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    users = mongo.db.users
+    login_user = users.find_one({'name': request.form['username']})
+
+    if login_user:
+        if bcrypt.hashpw(request.
+                         form['pass'].encode('utf-8'),
+                         login_user['password']) == login_user['password']:
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
+
+    return 'Invalid username or password'
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        users = mongo.db.users
+        existing_user = users.find_one({'name': request.form['username']})
+
+        if existing_user is None:
+            hashpass = bcrypt.hashpw(request.form['pass'].
+                                     encode('utf-8'), bcrypt.gensalt())
+            users.insert({'name': request.form['username'],
+                          'password': hashpass})
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
+
+        return 'That username already exists!'
+
+    return render_template('register.html')
+
+
+@app.route('/get_books')
 def get_books():
     categories = list(mongo.db.categories.find())
     booksbycat = []
@@ -68,14 +114,16 @@ def add_book():
 
 @app.route('/insert_book', methods=['POST'])
 def insert_book():
-
+    user = mongo.db.users.find_one({"name": session['username']})
+    print(user)
     book_doc = {'book_name': request.form.get('book_name'),
                 'book_year': request.form.get('year'),
                 'image_source': request.form.get('image_source'),
                 'book_author': request.form.get('author'),
                 'book_category': request.form.get('book_category'),
                 'book_link': request.form.get('book_link'),
-                'book_description': request.form.get('description')}
+                'book_description': request.form.get('description'),
+                'user_id': user['_id']}
 
     category = mongo.db.categories.find_one({"category_name": request.form.get('book_category')})
 
@@ -90,6 +138,7 @@ def insert_book():
 
 @app.route('/insert_review/<book_id>', methods=['POST'])
 def insert_review(book_id):
+    user = mongo.db.users.find_one({"name": session['username']})
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
 
     now = datetime.now().strftime("%Y-%M-%D")
@@ -98,7 +147,8 @@ def insert_review(book_id):
                   'book_name': request.form.get('book_name'),
                   'date': now,
                   'review': request.form.get('review'),
-                  'book_id': the_book['_id']}
+                  'book_id': the_book['_id'],
+                  'user_id': user['_id']}
 
     mongo.db.reviews.insert_one(review_doc)
 
@@ -124,10 +174,12 @@ def add_review(book_id):
 
 @app.route('/add_rating/<book_id>/<int:rating>')
 def add_rating(book_id, rating):
+    user = mongo.db.users.find_one({"name": session['username']})
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
     rating_doc = {'book_name': the_book['book_name'],
                   'book_id': the_book['_id'],
-                  'rating': rating}
+                  'rating': rating,
+                  'user_id': user['_id']}
     mongo.db.rating.insert_one(rating_doc)
     return redirect(url_for('display_book', book_id=the_book['_id']))
 
