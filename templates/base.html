@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
+    <script
+      src="https://kit.fontawesome.com/ccf52fe8c1.js"
+      crossorigin="anonymous"
+    ></script>
 
     <link
       rel="stylesheet"
@@ -33,11 +33,9 @@
     <header>
       <!-----------------nav-bar-------------------------->
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        
-      
-
         <a class="navbar-brand" href="{{url_for('get_books')}}"
-          ><img class="logo" src="./static/images/logo.png" alt="" /><span class="logo_name"
+          ><img class="logo" src="{{url_for('static',filename='images/logo.png')}}" alt="" /><span
+            class="logo_name"
             >Your Book</span
           ></a
         >
@@ -56,29 +54,33 @@
         <div class="collapse navbar-collapse" id="navbarsExample04">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
+              <a class="nav-link" href="{{url_for('get_books')}}"
+                >Home<span class="sr-only">(home)</span></a
+              >
+            </li>
+            <li class="nav-item active">
               <a class="nav-link" href="{{url_for('add_book')}}"
-                >Add Book<span class="sr-only">(current)</span></a
+                >Add Book<span class="sr-only">(add book)</span></a
               >
             </li>
-              <li class="nav-item active">
-              
-                <a class="nav-link" href="{{url_for('login')}}"
-                >Login<span class="sr-only">(current)</span></a
+            <li class="nav-item active">
+              <a class="nav-link" href="{{url_for('user_books')}}"
+                >Your Books<span class="sr-only">(your books)</span></a
               >
-              
             </li>
-
-            <li>
+            <li class="nav-item dropdown active">
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
-                id="dropdown05"
+                id="navbarDropdown"
+                role="button"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                >Categories</a
               >
-              <div class="dropdown-menu" aria-labelledby="dropdown05">
+                Categories
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 {% for category in categories %}
                 <a
                   class="dropdown-item"
@@ -87,8 +89,15 @@
                   href="{{url_for('view_by_cat',category_id=category._id)}}"
                   >{{category.category_name}}</a
                 >
+
                 {% endfor %}
               </div>
+            </li>
+
+            <li class="nav-item active">
+              <a class="nav-link" href="{{url_for('logout')}}"
+                >Logout<span class="sr-only">(logout)</span></a
+              >
             </li>
           </ul>
           <form
@@ -102,6 +111,7 @@
               placeholder="Search By Book Name"
               name="search"
               id="search"
+              required
             />
           </form>
         </div>

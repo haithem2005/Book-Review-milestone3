@@ -2,11 +2,6 @@
 
 {% extends 'base.html' %} {% block content %}
 <section class="container-fluid no-gutters">
-<div class="row no-gutters container">
-<div class="col-md-3">
-{{ pagination.links }}
-</div>
-</div>
   <div class="row no-gutters container-fluid books_header">
     <div class="col-md-3">
       <h3 class="book_category">{{result}}</h3>
@@ -51,7 +46,7 @@
 
      {% endfor %}
   </div>
-  <div class="row">
+  <div class="row ">
   <div class="col">
   {{ pagination.links }}
   {{ pagination.info }}

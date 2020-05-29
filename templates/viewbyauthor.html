@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 
 {% extends 'base.html' %} {% block content %}
-
 <section class="container-fluid no-gutters">
   <div class="row no-gutters  books_header">
     <div class="col-md-3">
-      <h3 class="book_category">{{category.category_name}}</h3>
+      <h3 class="book_category">Books By {{author}}</h3>
     </div>
   </div>
     <div class="row no-gutters  book_display">
-      {% for book in books %} {% if book.book_category==category.category_name
-      %}
-
+      {% for book in books %} 
       <div class="col-md-6 col-lg-4">
         <div class="card-dick">
           <div class="row no-gutters">
@@ -49,7 +46,7 @@
       
     </div>
 
-    {% endif %} {% endfor %}
+ {% endfor %}
   </div>
   <div class="row no-gutters justify-content-center">
   <div class="col">

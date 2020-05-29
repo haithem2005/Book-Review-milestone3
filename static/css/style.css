@@ -123,8 +123,10 @@ button[type="submit"]{
     text-align: right;
 }
 .viewall{
-     
+    margin-top: 50px;
     margin-right: 15px; 
+    margin-bottom: 30px;
+  
 }
 .book_category{
     margin-left: 10px;
@@ -132,14 +134,8 @@ button[type="submit"]{
 
 @media(min-width:776px){
 
-
-.viewall{
-     
-    margin-right: 25px; 
-}
-
 .book_category{
-    margin-left: 10px;
+    margin-left: 30px;
 }
 .card-dick{
     height: 250px;
@@ -199,12 +195,9 @@ footer{
 .logo_name{
 background: rgb(121,140,235);
 background: radial-gradient(circle, rgba(121,140,235,1) 0%, rgba(224,6,6,1) 100%);
-  -webkit-background-clip: text;
-
-  -webkit-text-fill-color: transparent;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
 }
-
-
 
 
 .pagination-page-info {
@@ -212,16 +205,33 @@ background: radial-gradient(circle, rgba(121,140,235,1) 0%, rgba(224,6,6,1) 100%
     padding-left: 0;
     width: 40em;
     margin: .5em;
-    margin-left: 0;
+    margin-left: 30px;
+    margin-bottom: 30px;
     font-size: 12px;
 }
 .pagination-page-info b {
-    color: black;
-    background: #6aa6ed;
+    color: white;
+    background: black;
+    border-color:red;
     padding-left: 2px;
     padding: .1em .25em;
     font-size: 150%;
+    
 }
 
+.page-item.active .page-link{
+    background-color: black;
+    border-color:red;
+}
+.page-link{
+     color: black;
+}
 
+/*---------------login-page-----------------------*/
+
+
+.login-form{
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
 

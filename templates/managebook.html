@@ -2,13 +2,13 @@
 
 {% extends 'base.html' %} {% block content %}
 
-<h3 class="addbook-header">Add book</h3>
+<h3 class="addbook-header">Manage book</h3>
 <div class="container-fluid">
   <div class="row no-gutters justify-content-center">
     <div class="col-md-8 mainblock">
       <div class="container-fluid book-form">
         <form
-          action="{{url_for('insert_book')}}"
+          action="{{url_for('update_book',book_id=book._id)}}"
           class="form-addbook"
           method="POST"
         >
@@ -24,7 +24,7 @@
                 class="form-control"
                 id="book_name"
                 name="book_name"
-                placeholder="Book Name"
+                value="{{book.book_name}}"
                 required
               />
             </div>
@@ -37,7 +37,7 @@
                 class="form-control"
                 id="year"
                 name="year"
-                placeholder="Book Published Year"
+                value="{{book.book_year}}"
                 required
               />
             </div>
@@ -50,7 +50,7 @@
                 class="form-control"
                 id="author"
                 name="author"
-                placeholder="Book Author"
+                value="{{book.book_author}}"
                 required
               />
             </div>
@@ -65,12 +65,12 @@
                 class="form-control"
                 id="image_source"
                 name="image_source"
-                placeholder="Book Image Source"
+                value="{{book.image_source}}"
                 required
               />
             </div>
           </div>
-        <div class="form-group row no-gutters justify-content-center">
+          <div class="form-group row no-gutters justify-content-center">
             <label for="book_link" class="col-md-2 col-form-label"
               >Book Link</label
             >
@@ -80,11 +80,10 @@
                 class="form-control"
                 id="book_link"
                 name="book_link"
-                placeholder="Book Link"
+                value="{{book.book_link}}"
                 required
               />
             </div>
-            
           </div>
           <div class="form-group row no-gutters justify-content-center">
             <label for="book_category" class="col-md-2 col-form-label"
@@ -96,9 +95,11 @@
                 name="book_category"
                 class="form-control"
               >
-                <option selected>Choose Category</option>
+                <option selected>{{book.book_category}}</option>
                 {% for category in categories %}
-                <option value="{{category.category_name}}">{{category.category_name}}</option>
+                <option value="{{book.book_category}}"
+                  >{{category.category_name}}</option
+                >
                 {% endfor %}
               </select>
             </div>
@@ -113,9 +114,8 @@
                 class="form-control"
                 id="description"
                 name="description"
-                placeholder="Your Description For This Book"
                 rows="5"
-              ></textarea>
+              >{{book.book_description}}</textarea>
             </div>
           </div>
           <div
@@ -123,11 +123,18 @@
           >
             <div class="col-md-3 justify-content-center addbook-button">
               <button type="submit" class="btn btn-secondary" name="action">
-                Add Book
+                Edit Book
               </button>
             </div>
           </div>
         </form>
+        <div
+          class="row no-gutters justify-content-center justify-content-center"
+        >
+          <div class="col-md-3 justify-content-center addbook-button">
+          <a class="btn btn-secondary" href="{{url_for('delete_book',book_id=book._id)}}" role="button">Remove Book</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

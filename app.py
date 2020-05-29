@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from datetime import datetime
+from flask import session
 from flask_paginate import Pagination, get_page_args
 import bcrypt
 from os import path
@@ -30,7 +31,9 @@ def index():
     if 'username' in session:
         return redirect(url_for('get_books'))
 
-    return render_template('index.html')
+    return render_template('login.html', page_title="login")
+
+#              ######################################################
 
 
 @app.route('/login', methods=['POST'])
@@ -45,7 +48,9 @@ def login():
             session['username'] = request.form['username']
             return redirect(url_for('index'))
 
-    return 'Invalid username or password'
+    return render_template("login.html", error="invalid username or password")
+
+#              ######################################################
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -64,7 +69,18 @@ def register():
 
         return 'That username already exists!'
 
-    return render_template('register.html')
+    return render_template('register.html', page_title="register")
+
+#              ######################################################
+
+
+@app.route('/logout',  methods=['POST', 'GET'])
+def logout():
+    if 'username' in session:
+        session.clear()
+        return redirect(url_for('index'))
+
+#              ######################################################
 
 
 @app.route('/get_books')
@@ -81,7 +97,7 @@ def get_books():
         for book in books:
             book['rating'] = rating(book['_id'])
         booksbycat.append(_books)
-    return render_template("books.html", page_title="Your Book",
+    return render_template("books.html", page_title="all Books",
                            booksbycat=booksbycat,
 
                            categories=list(mongo.db.categories.find()))
@@ -89,16 +105,76 @@ def get_books():
 #              ######################################################
 
 
-# @app.route('/reviews/<book_id>')
-# def reviews(book_id):
-#    the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
+@app.route('/user_books')
+def user_books():
+    if 'username' in session:
 
-#    reviews = mongo.db.reviews.find({"book_id": the_book['_id']})
-#    return render_template('reviews.html',
-#                           book=the_book,
-#                           reviews=reviews,
-#                           categories=list(mongo.db.categories.find()),
-#                           page_title=the_book['book_name']+" Reviews")
+        page, per_page, offset = get_page_args(page_parameter='page',
+                                               per_page_parameter='per_page')
+        user = mongo.db.users.find_one({"name": session['username']})
+        books = list(mongo.db.books.find({"user_id": user['_id']}))
+
+        for book in books:
+            book['rating'] = rating(book['_id'])
+
+        total = len(books)
+
+        the_books = books[offset: offset + per_page]
+
+        pagination = Pagination(page=page, per_page=per_page, total=total,
+                                css_framework='bootstrap4',
+                                format_total=True,
+                                format_number=True,  # turn on format flag
+                                record_name='Books', alignment='center')
+
+        return render_template("userbooks.html", page_title="your books",
+                               categories=list(mongo.db.categories.find()),
+                               books=the_books,
+                               page=page,
+                               per_page=per_page,
+                               offset=offset,
+                               pagination=pagination,)
+    else:
+        return redirect(url_for('index'))
+#              ######################################################
+
+
+@app.route('/manage_book/<book_id>')
+def manage_book(book_id):
+    the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
+    return render_template("managebook.html",
+                           categories=list(mongo.db.categories.find()),
+                           book=the_book,
+                           page_title="manage book")
+
+#              ######################################################
+
+
+@app.route('/update_book/<book_id>', methods=['Post'])
+def update_book(book_id):
+    category = mongo.db.categories.find_one({"category_name": request
+                                            .form.get('book_category')})
+    user = mongo.db.users.find_one({"name": session['username']})
+    mongo.db.books.update_one({'_id': ObjectId(book_id)}, {
+                           'book_name': request.form.get('book_name'),
+                           'book_year': request.form.get('year'),
+                           'image_source': request.form.get('image_source'),
+                           'book_author': request.form.get('author'),
+                           'book_category': request.form.get('book_category'),
+                           'book_link': request.form.get('book_link'),
+                           'book_description': request
+                           .form.get('description'),
+                           'user_id': user['_id'],
+                           'category_id': category['_id']})
+    return redirect(url_for('user_books'))
+
+#              ######################################################
+
+
+@app.route('/delete_book/<book_id>')
+def delete_book(book_id):
+    mongo.db.books.remove({'_id': ObjectId(book_id)})
+    return redirect(url_for('user_books'))
 
 #              ######################################################
 
@@ -115,7 +191,8 @@ def add_book():
 @app.route('/insert_book', methods=['POST'])
 def insert_book():
     user = mongo.db.users.find_one({"name": session['username']})
-    print(user)
+    category = mongo.db.categories.find_one({"category_name": request
+                                            .form.get('book_category')})
     book_doc = {'book_name': request.form.get('book_name'),
                 'book_year': request.form.get('year'),
                 'image_source': request.form.get('image_source'),
@@ -123,12 +200,9 @@ def insert_book():
                 'book_category': request.form.get('book_category'),
                 'book_link': request.form.get('book_link'),
                 'book_description': request.form.get('description'),
-                'user_id': user['_id']}
+                'user_id': user['_id'],
+                'category_id': category['_id']}
 
-    category = mongo.db.categories.find_one({"category_name": request.form.get('book_category')})
-
-    category_id = category['_id']
-    book_doc['category_id'] = category_id
     mongo.db.books.insert_one(book_doc)
 
     return redirect(url_for('get_books'))
@@ -141,7 +215,7 @@ def insert_review(book_id):
     user = mongo.db.users.find_one({"name": session['username']})
     the_book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
 
-    now = datetime.now().strftime("%Y-%M-%D")
+    now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
 
     review_doc = {'name': request.form.get('your_name'),
                   'book_name': request.form.get('book_name'),
@@ -183,6 +257,8 @@ def add_rating(book_id, rating):
     mongo.db.rating.insert_one(rating_doc)
     return redirect(url_for('display_book', book_id=the_book['_id']))
 
+#              ######################################################
+
 
 @app.route('/display_book/<book_id>')
 def display_book(book_id):
@@ -193,24 +269,27 @@ def display_book(book_id):
     if the_book['category_id']:
         the_book_category = the_book['category_id']
         related_books = list(mongo.db.books.
-                             find({"category_id": the_book_category,  "_id": {"$ne": ObjectId(book_id)}})
+                             find({"category_id": the_book_category,
+                                   "_id": {"$ne": ObjectId(book_id)}})
                              .limit(3))
 
     for book in related_books:
         book['rating'] = rating(the_book['_id'])
 
     related_books_author = list(mongo.db.books.
-                                find({"book_author": the_book['book_author']})
+                                find({"book_author": the_book['book_author'],
+                                      "_id": {"$ne": ObjectId(book_id)}})
                                 .limit(3))
     for book in related_books_author:
         book['rating'] = rating(the_book['_id'])
 
     return render_template('displaybook.html',
-                           categeories=list(mongo.db.categories.find()),
+                           categories=list(mongo.db.categories.find()),
                            related_books=related_books,
                            the_book=the_book,
                            reviews=book_reviews,
                            related_books_author=related_books_author,
+                           page_title=the_book['book_name']
                            )
 
 #              ######################################################
@@ -255,6 +334,39 @@ def view_by_cat(category_id):
 #              ######################################################
 
 
+@app.route('/view_by_author/<author>')
+def view_by_author(author):
+    page, per_page, offset = get_page_args(page_parameter='page',
+                                           per_page_parameter='per_page')
+    books = list(mongo.db.books.find({"book_author":
+                                      {"$regex":  author, "$options": 'i'}}))
+
+    for book in books:
+        book['rating'] = rating(book['_id'])
+
+    total = len(books)
+
+    the_books = books[offset: offset + per_page]
+
+    pagination = Pagination(page=page, per_page=per_page, total=total,
+                            css_framework='bootstrap4',
+                            format_total=True,   # format total. example 1,024
+                            format_number=True,  # turn on format flag
+                            record_name='Books', alignment='center')
+
+    return render_template('viewbyauthor.html',
+                           author=author,
+                           books=the_books,
+                           categories=list(mongo.db.categories.find()),
+                           page=page,
+                           per_page=per_page,
+                           offset=offset,
+                           pagination=pagination,
+                           page_title="view by author")
+
+#              ######################################################
+
+
 @app.route('/rating/<book_id>')
 def rating(book_id):
     rating_sum = 0
@@ -270,6 +382,8 @@ def rating(book_id):
         final_rating = "No Rating"
     return final_rating
 
+#              ######################################################
+
 
 # this function takes the book name from the search bar
 # and search all the books name then display the result
@@ -279,13 +393,22 @@ def rating(book_id):
 # from the search bar to the names of all the books in mogo db
 # this function use pagination to display the searched books 10 books per page
 
-@app.route('/find_book', methods=['POST'])
+@app.route('/find_book', methods=['GET', 'POST'])
 def find_book():
     result = 0
     page, per_page, offset = get_page_args(page_parameter='page',
                                            per_page_parameter='per_page')
 
-    required_book = request.form.get('search')
+    if session.get('required_book'):
+        if request.form.get('search'):
+            required_book = request.form.get('search')
+            session['required_book'] = required_book
+        else:
+            required_book = session['required_book']
+    else:
+        required_book = request.form.get('search')
+        session['required_book'] = required_book
+
     result_books = list(mongo.db.books.
                         find({"book_name":
                              {"$regex":  required_book, "$options": 'i'}}))
