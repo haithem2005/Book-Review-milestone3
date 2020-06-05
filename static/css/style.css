@@ -131,15 +131,19 @@ button[type="submit"]{
 .book_category{
     margin-left: 10px;
 }
+.card-dick{
+    margin-left: 37px;
+}
 
-@media(min-width:776px){
+@media(min-width:760px){
 
 .book_category{
     margin-left: 30px;
 }
 .card-dick{
     height: 250px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    margin-left: 0px;
 }
 .card-img{
     height: 250px;
@@ -201,12 +205,12 @@ background: radial-gradient(circle, rgba(121,140,235,1) 0%, rgba(224,6,6,1) 100%
 
 
 .pagination-page-info {
-    padding: .6em;
+    padding: 0;
     padding-left: 0;
-    width: 40em;
     margin: .5em;
     margin-left: 30px;
     margin-bottom: 30px;
+    margin-top: 30px;
     font-size: 12px;
 }
 .pagination-page-info b {
@@ -214,7 +218,7 @@ background: radial-gradient(circle, rgba(121,140,235,1) 0%, rgba(224,6,6,1) 100%
     background: black;
     border-color:red;
     padding-left: 2px;
-    padding: .1em .25em;
+    padding: 0;
     font-size: 150%;
     
 }
@@ -234,4 +238,16 @@ background: radial-gradient(circle, rgba(121,140,235,1) 0%, rgba(224,6,6,1) 100%
     margin-top: 100px;
     margin-bottom: 100px;
 }
+/*---------------displatbook-page-----------------------*/
 
+.btn-display{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.bookimage{
+    margin-bottom: 30px;
+}
+.error-meaasge{
+    margin-bottom: 70px;
+    text-align: center;
+}

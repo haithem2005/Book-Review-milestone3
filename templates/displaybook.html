@@ -69,7 +69,7 @@
               >
               <a
                 name="rating"
-                class="dropdown-item"
+                class="dropdown-item btn-display"
                 href="{{url_for('add_rating',book_id=the_book._id, rating='5')}}"
                 >5</a
               >
@@ -78,7 +78,7 @@
         </div>
         <div class="col-10 col-md-8">
           <a
-            class="btn btn-success"
+            class="btn btn-success btn-display"
             href="{{the_book.book_link}}"
             role="button"
             target="_blank"
@@ -111,7 +111,7 @@
 
 <div class="section main_review">
   <div class="row no-gutters justify-content-center">
-    <div class="col-md-9">
+    <div class="col-11 col-md-9">
       {% for review in reviews %}
       <div class="container-fluid each_review">
         <div class="row no-gutters header_review">
@@ -136,15 +136,9 @@
 
 
 <section class="no-gutters container-fluid">
-
-<div class="row no-gutters container-fluid books_header">
-<div class="col-12 ">
-      <h3 class="book_category ">Related Books</h3>
-    </div>
-</div>
   <div class="row no-gutters container-fluid books_header">
     <div class="col-4 ">
-      <h4 class="book_category">By Category</h4>
+      <h3 class="book_category">Related Books By Category</h3>
     </div>
     <div class="col-4 offset-4  div_viewall">
       <a class="viewall" href="{{url_for('view_by_cat',category_id=the_book.category_id)}}">view all</a>
@@ -156,7 +150,7 @@
   <div class="row no-gutters book_display">
   {% for book in related_books %}
   
-    <div class="col-10 col-md-6 col-lg-4">
+    <div class="col-11 col-md-6 col-lg-4">
       <div class="card-dick ">
         <div class="row no-gutters">
           <div class="col-md-4 card_image">
@@ -192,7 +186,7 @@
   
   <div class="row no-gutters container-fluid books_header">
     <div class="col-4 ">
-      <h4 class="book_category ">By Author</h4>
+      <h3 class="book_category ">Related Books By Author</h3>
     </div>
     <div class="col-4 offset-4  div_viewall">
       <a class="viewall" href="{{url_for('view_by_author',author=the_book.book_author)}}">view all</a>
@@ -201,19 +195,17 @@
 
    <div class="row no-gutters  book_display">
    {% if not related_books_author  %}
-   
-    <div class="row no-gutters">
-    <div class="col">
-    <h4>No Books Found</h4>
-    </div></div>
+    <div class="col error-meaasge">
+    <h4 class=>No Books Found</h4>
+    </div>
     {% else   %}
     
   {% for book in related_books_author %}
    
-    <div class="col-10 col-md-6 col-lg-4">
+    <div class="col-11 col-md-6 col-lg-4">
       <div class="card-dick ">
         <div class="row no-gutters">
-          <div class="col-10 col-md-4 card_image">
+          <div class="col-md-4 card_image">
 
             <img  src="{{book.image_source}}" class="card-img" alt="..." width="100%"  height="100%"/>
           </div>
